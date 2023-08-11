@@ -31,13 +31,20 @@ class Post(models.Model):
 
 
 class PostComment(models.Model):
-    main_post = models.ForeignKey(
-        Post,
-        on_delete=models.SET_NULL,
+    comment_author = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
         null=False,
         blank=False
-        )
+    )
 
     content = models.CharField(max_length=250)
     date_posted = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
+
+    main_post = models.ForeignKey(
+        Post,
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False
+        )
