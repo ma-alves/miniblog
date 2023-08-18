@@ -14,7 +14,7 @@ class PostAuthor(models.Model):
 class Post(models.Model):
     title = models.CharField(max_length=50)
     content = models.TextField(max_length=2000)
-    likes = models.IntegerField()
+    likes = models.IntegerField(default=0)
 
     author = models.ForeignKey(
         PostAuthor,
@@ -31,16 +31,16 @@ class Post(models.Model):
 
 
 class PostComment(models.Model):
-    comment_author = models.OneToOneField(
+    content = models.CharField(max_length=250)
+    date_posted = models.DateTimeField(auto_now_add=True)
+    last_modified = models.DateTimeField(auto_now=True)
+
+    comment_author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         null=False,
         blank=False
-    )
-
-    content = models.CharField(max_length=250)
-    date_posted = models.DateTimeField(auto_now_add=True)
-    last_modified = models.DateTimeField(auto_now=True)
+        )
 
     main_post = models.ForeignKey(
         Post,
@@ -48,3 +48,7 @@ class PostComment(models.Model):
         null=False,
         blank=False
         )
+
+    def __str__(self) -> str:
+        return self.content[:15] + "..."
+    
