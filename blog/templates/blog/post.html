@@ -1,0 +1,23 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>{{ post.title }}, by {{ post.author }}</h1>
+
+  <p>{{ post.content }}</p>
+  <p>Likes: {{ post.likes }}</p>
+  
+  {% if user.is_staff %}
+    {% if perms.catalog.can_mark_returned %}  
+
+    {% endif %}
+  {% endif %}
+  <div style="margin-left:20px;margin-top:20px">
+    <h4>Comments</h4>
+    <dl>
+    {% for comment in post.postcomment_set.all %}
+        <dt><a href="">{{ comment.comment_author }}</a></dt>
+        <dd>{{ comment.content }}</dd>
+    {% endfor %}
+    </dl>
+  </div>
+{% endblock %}

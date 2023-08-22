@@ -21,3 +21,8 @@ class PostListView(generic.ListView):
     def get_queryset(self):
         return Post.objects.all()
     
+
+class PostDetailView(generic.DetailView):
+    model = Post
+    template_name = 'blog/post.html'
+
