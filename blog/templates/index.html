@@ -11,5 +11,17 @@
     <em>meeeeeeeeee</em> with the help of the MDN folks!
   </p>
   <h2>Dynamic content</h2>
-  </p>
+  <p>Latest posts</p>
+  {% if post_list %}
+    <ul>
+      {% for post in post_list %}
+      <li>
+        <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+        ({{ post.author }}) - {{ post.content }}
+      </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>There are no posts available.</p>
+  {% endif %}
 {% endblock %}
