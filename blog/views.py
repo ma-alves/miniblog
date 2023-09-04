@@ -38,6 +38,12 @@ class AuthorListView(generic.ListView):
 
     def get_queryset(self):
         return PostAuthor.objects.all()
+
+
+class AuthorDetailView(generic.DetailView):
+    model = PostAuthor
+    template_name = 'blog/author.html'
+    
     
 '''
 class PostDetailView(generic.DetailView):

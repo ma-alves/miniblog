@@ -1,0 +1,22 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>{{ postauthor.user }}</h1>
+  <p>Bio: {{ postauthor.bio }}</p>
+  
+  {% if user.is_staff %}
+    {% if perms.catalog.can_mark_returned %}  
+
+    {% endif %}
+  {% endif %}
+
+  <div style="margin-left:20px;margin-top:20px">
+    <h4>Posts</h4>
+    <dl>
+    {% for post in postauthor.post_set.all %}
+        <dt><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></dt>
+    {% endfor %}
+    </dl>
+  </div>
+
+{% endblock %}

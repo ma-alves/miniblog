@@ -12,7 +12,6 @@ class PostAuthor(models.Model):
         return self.user.username
     
     def get_absolute_url(self):
-        # Not working yet
         return reverse('author', args=[str(self.id)])
 
 
