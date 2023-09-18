@@ -5,6 +5,7 @@ from .models import Post, PostAuthor, PostComment
 
 admin.site.register(PostAuthor)
 
+
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     list_display = ('title', 'author', 'date_posted', 'last_modified')
