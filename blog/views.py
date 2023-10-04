@@ -1,8 +1,13 @@
 from typing import Any
+
 from django.db.models.query import QuerySet
-from django.http import HttpResponse
-from django.shortcuts import render
+from django.forms.models import BaseModelForm
+from django.http import HttpRequest, HttpResponse
+from django.shortcuts import render, get_object_or_404
 from django.views import generic
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.decorators import login_required
 
 from .models import Post, PostAuthor
 
@@ -44,9 +49,3 @@ class AuthorDetailView(generic.DetailView):
     model = PostAuthor
     template_name = 'blog/author.html'
     
-    
-'''
-class PostDetailView(generic.DetailView):
-    model = Post
-    template_name = 'blog/post.html'
-'''
