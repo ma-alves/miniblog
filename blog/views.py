@@ -50,10 +50,18 @@ class AuthorDetailView(generic.DetailView):
     template_name = 'blog/author.html'
     
 
-class PostCreate(LoginRequiredMixin, CreateView):
+class PostCreate(PermissionRequiredMixin, CreateView):
     model = Post
     fields = ['title','content']
+    permission_required = 'blog.creator'
     
     def form_valid(self, form: BaseModelForm) -> HttpResponse:
         form.instance.author_id = self.request.user.id
         return super().form_valid(form)
+
+
+class PostUpdate(PermissionRequiredMixin, UpdateView):
+    model = Post
+    fields = ['title','content']
+    permission_required = 'blog.creator'
+    
