@@ -7,8 +7,9 @@
     <h4>Posts</h4>
     
     {% for post in postauthor.user.post_set.all %}
-        <dt><a href="{% url 'post' post.pk %}">{{ post.title }}</a></dt>
-        <dd>{{ post.content }}</dd>
+        <!--<dt><a href="{% url 'post' post.pk %}">{{ post.title }}</a></dt>-->
+        <dt><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></dt>
+        <dd>{{ post.content|truncatechars:40 }}</dd>
     {% endfor %}
     
   </div>
