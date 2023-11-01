@@ -9,7 +9,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.decorators import login_required
 
-from .models import Post, PostAuthor
+from .models import Post, PostAuthor, User
 
 # Create your views here.
 
@@ -48,4 +48,20 @@ class AuthorListView(generic.ListView):
 class AuthorDetailView(generic.DetailView):
     model = PostAuthor
     template_name = 'blog/author.html'
+    
+
+class PostCreate(PermissionRequiredMixin, CreateView):
+    model = Post
+    fields = ['title','content']
+    permission_required = 'blog.creator'
+    
+    def form_valid(self, form: BaseModelForm) -> HttpResponse:
+        form.instance.author_id = self.request.user.id
+        return super().form_valid(form)
+    
+
+class PostUpdate(PermissionRequiredMixin, UpdateView):
+    model = Post
+    fields = ['title','content']
+    permission_required = 'blog.creator'
     

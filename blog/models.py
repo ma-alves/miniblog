@@ -5,7 +5,7 @@ from django.urls import reverse
 # Create your models here.
 
 class PostAuthor(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=False)
     bio = models.CharField(max_length=50)
 
     def __str__(self):
@@ -21,9 +21,9 @@ class Post(models.Model):
     likes = models.IntegerField(default=0)
 
     author = models.ForeignKey(
-        PostAuthor,
-        on_delete=models.SET_NULL,
-        null=True,
+        User,
+        on_delete=models.CASCADE,
+        null=False,
         )
     
     date_posted = models.DateTimeField(auto_now_add=True)
