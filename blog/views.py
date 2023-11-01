@@ -58,7 +58,7 @@ class PostCreate(PermissionRequiredMixin, CreateView):
     def form_valid(self, form: BaseModelForm) -> HttpResponse:
         form.instance.author_id = self.request.user.id
         return super().form_valid(form)
-
+    
 
 class PostUpdate(PermissionRequiredMixin, UpdateView):
     model = Post
