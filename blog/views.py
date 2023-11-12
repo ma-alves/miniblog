@@ -1,15 +1,12 @@
-from typing import Any
-
-from django.db.models.query import QuerySet
 from django.forms.models import BaseModelForm
-from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render
 from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.urls import reverse, reverse_lazy
 
-from .models import Post, PostAuthor, User
+from .models import Post, PostAuthor
 
 # Create your views here.
 
@@ -53,7 +50,7 @@ class AuthorDetailView(generic.DetailView):
 class PostCreate(PermissionRequiredMixin, CreateView):
     model = Post
     fields = ['title','content']
-    permission_required = 'blog.creator'
+    permission_required = ['blog.add_post']
     
     def form_valid(self, form: BaseModelForm) -> HttpResponse:
         form.instance.author_id = self.request.user.id
@@ -63,5 +60,20 @@ class PostCreate(PermissionRequiredMixin, CreateView):
 class PostUpdate(PermissionRequiredMixin, UpdateView):
     model = Post
     fields = ['title','content']
-    permission_required = 'blog.creator'
+    permission_required = ['blog.change_post']
     
+
+class PostDelete(PermissionRequiredMixin, DeleteView):
+    model = Post
+    success_url = reverse_lazy('posts')
+    permission_required = ['blog.delete_post']
+    
+    def form_valid(self, form):
+        try:
+            self.object.delete()
+            return HttpResponseRedirect(self.success_url)
+        except Exception as e:
+            return HttpResponseRedirect(
+                reverse("delete-post", kwargs={"pk": self.object.pk})
+            )
+        

@@ -6,11 +6,12 @@
   <p>{{ post.content }}</p>
   <p>Likes: {{ post.likes }}</p>
   
-  {% if user.is_staff %}
-    {% if perms.catalog.can_mark_returned %}  
-
+  {% if user.id == post.author.id %}
+    {% if perms.blog.change_post %}
+      <p><a href="{% url 'update-post' post.pk %}">Update post</a> | <a href="{% url 'delete-post' post.pk %}">Delete post</a></p>
     {% endif %}
   {% endif %}
+
   <div style="margin-left:20px;margin-top:20px">
     <h4>Comments</h4>
 

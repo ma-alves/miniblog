@@ -13,7 +13,7 @@ class PostAuthor(models.Model):
     
     def get_absolute_url(self):
         return reverse('author', args=[str(self.id)])
-
+    
 
 class Post(models.Model):
     title = models.CharField(max_length=50)
@@ -34,6 +34,9 @@ class Post(models.Model):
     
     def get_absolute_url(self):
         return reverse('post', args=[str(self.id)])
+
+    class Meta:
+        permissions = (('can_update','Update post content.'),)
 
 
 class PostComment(models.Model):
