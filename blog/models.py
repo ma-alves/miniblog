@@ -36,7 +36,7 @@ class Post(models.Model):
         return reverse('post', args=[str(self.id)])
 
     class Meta:
-        permissions = (('can_update','Update post content.'),)
+        permissions = (('creator','Can create, update and delete creator content.'),)
 
 
 class PostComment(models.Model):
