@@ -1,8 +1,22 @@
 from django.contrib import admin
+from django.contrib.auth.models import User
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from .models import Post, PostAuthor, PostComment
 
 # Register your models here.
 
+
+class AuthorInline(admin.StackedInline):
+    model = PostAuthor
+
+
+class UserAdmin(BaseUserAdmin):
+    '''Extends the UserAdmin'''
+    inlines = (AuthorInline,)
+    
+
+admin.site.unregister(User)
+admin.site.register(User,UserAdmin)
 admin.site.register(PostAuthor)
 
 

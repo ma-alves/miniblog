@@ -1,0 +1,53 @@
+from django.contrib.auth.models import User
+from django.test import TestCase
+
+from ..models import Post, PostAuthor
+
+
+class AuthorModelTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        User.objects.create_user(username='TestingUser', password='#HYAhaha5454')
+        PostAuthor.objects.create(user_id=1, bio='Testing bio.')
+
+    def test_author_str_is_username(self):
+        user = User.objects.get(id=1)
+        expected_username = user.username
+        author = PostAuthor.objects.get(id=1)
+        self.assertEqual(str(author), expected_username)
+
+    def test_author_id_is_user_id(self):
+        user = User.objects.get(id=1)
+        expected_id = user.id
+        author = PostAuthor.objects.get(id=1)
+        self.assertEqual(author.id, expected_id)
+
+    def test_author_absolute_url(self):
+        author = PostAuthor.objects.get(id=1)
+        self.assertEqual(author.get_absolute_url(), '/blog/author/1')
+
+    def test_bio_label(self):
+        author = PostAuthor.objects.get(id=1)
+        bio_label = author._meta.get_field('bio').verbose_name
+        self.assertEqual(bio_label, 'bio')
+    
+    def test_bio_max_length(self):
+        author = PostAuthor.objects.get(id=1)
+        max_length = author._meta.get_field('bio').max_length
+        self.assertEqual(max_length, 50)
+
+
+class PostModelTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        user = User.objects.create_user(username='TestingUser2', password='#TGRubhs8745')
+        Post.objects.create(
+            title = 'Test title.',
+            content = 'Test content and stuff and la di da...',
+            author = user
+        )
+
+    def test_foreign_key_is_user_id(self):
+        post = Post.objects.get(id=1)
+        created_user = User.objects.get(id=2)
+        self.assertEqual(post.author_id, created_user.id)

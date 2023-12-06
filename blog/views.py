@@ -1,12 +1,12 @@
-from typing import Any
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.forms.models import BaseModelForm
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
-from django.views import generic
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.urls import reverse, reverse_lazy
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views import generic
 
+from typing import Any
 from .models import Post, PostAuthor, PostComment
 
 
@@ -102,5 +102,5 @@ class CommentCreate(PermissionRequiredMixin, CreateView):
         # Call super-class form validation behaviour
         return super(CommentCreate, self).form_valid(form)
     
-    def get_success_url(self) -> str:
+    def get_success_url(self):
         return reverse('post', kwargs={'pk':self.kwargs['pk'],})
