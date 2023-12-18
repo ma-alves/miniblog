@@ -5,11 +5,13 @@
   <p>Bio: {{ postauthor.bio }}</p>
   <div style="margin-left:20px;margin-top:20px">
     <h4>Posts</h4>
-    
-    {% for post in postauthor.user.post_set.all %}
-        <dt><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></dt>
-        <dd>{{ post.content|truncatechars:40 }}</dd>
-    {% endfor %}
-    
+    {% if postauthor.user.post_set.all %}
+      {% for post in postauthor.user.post_set.all %}
+          <dt><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></dt>
+          <dd>{{ post.content|truncatechars:40 }}</dd>
+      {% endfor %}
+    {% else %}
+      <p>No posts yet.</p>
+    {% endif %}
   </div>
 {% endblock %}

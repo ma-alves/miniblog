@@ -8,7 +8,7 @@
   
   {% if user.id == post.author.id %}
     {% if perms.blog.creator %}
-      <p><a href="{% url 'update-post' post.pk %}">Edit</a> | <a href="{% url 'delete-post' post.pk %}">Delete</a></p>
+      <p><a href="{% url 'update-post' post.pk %}">(Edit</a> | <a href="{% url 'delete-post' post.pk %}">Delete)</a></p>
     {% endif %}
   {% endif %}
 

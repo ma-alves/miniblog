@@ -1,18 +1,17 @@
 from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.forms.models import BaseModelForm
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views import generic
 
-from typing import Any
 from .models import Post, PostAuthor, PostComment
 
 
 def index(request):
     context = {
-        'post_list': (post_list := Post.objects.all())
+        'post_list': (post_list := Post.objects.all()),
+        'author_list': (author_list := PostAuthor.objects.all())
     }
     return render(request, 'index.html', context)
 
@@ -51,12 +50,14 @@ class AuthorUpdate(PermissionRequiredMixin, UpdateView):
     fields = ['bio']
     permission_required = ['blog.change_']
 
+
 class PostCreate(PermissionRequiredMixin, CreateView):
     model = Post
     fields = ['title','content']
     permission_required = ['blog.creator']
     
-    def form_valid(self, form: BaseModelForm) -> HttpResponse:
+    def form_valid(self, form):
+        '''Referencia o autor do post à fk do post.'''
         form.instance.author_id = self.request.user.id
         return super().form_valid(form)
     

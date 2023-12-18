@@ -10,8 +10,7 @@
     Welcome to miniblog, a website developed by
     <em>meeeeeeeeee</em> with the help of the MDN folks!
   </p>
-  <h2>Dynamic content</h2>
-  <p>Latest posts</p>
+  <h2>Latest posts</h2>
   {% if post_list %}
     <ul>
       {% for post in post_list %}
@@ -23,5 +22,18 @@
     </ul>
   {% else %}
     <p>There are no posts available.</p>
+  {% endif %}
+
+  <h2>Authors</h2>
+  {% if author_list %}
+    <ul>
+      {% for author in author_list %}
+      <li>
+        <p><a href="{{ author.get_absolute_url }}">{{ author }}</a> - {{ author.bio }}</p>
+      </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>There are no authors available.</p>
   {% endif %}
 {% endblock %}
