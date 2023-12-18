@@ -4,7 +4,7 @@ from django.urls import reverse
 
 # Create your models here.
 
-class PostAuthor(models.Model):
+class Author(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=False)
     bio = models.CharField(max_length=50)
 

@@ -1,12 +1,12 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-  <h1>{{ postauthor.user }}</h1>
-  <p>Bio: {{ postauthor.bio }}</p>
+  <h1>{{ author.user }}</h1>
+  <p>Bio: {{ author.bio }}</p>
   <div style="margin-left:20px;margin-top:20px">
     <h4>Posts</h4>
-    {% if postauthor.user.post_set.all %}
-      {% for post in postauthor.user.post_set.all %}
+    {% if author.user.post_set.all %}
+      {% for post in author.user.post_set.all %}
           <dt><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></dt>
           <dd>{{ post.content|truncatechars:40 }}</dd>
       {% endfor %}

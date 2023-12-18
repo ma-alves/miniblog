@@ -5,13 +5,13 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views import generic
 
-from .models import Post, PostAuthor, PostComment
+from .models import Post, Author, PostComment
 
 
 def index(request):
     context = {
         'post_list': (post_list := Post.objects.all()),
-        'author_list': (author_list := PostAuthor.objects.all())
+        'author_list': (author_list := Author.objects.all())
     }
     return render(request, 'index.html', context)
 
@@ -31,22 +31,22 @@ class PostDetailView(generic.DetailView):
 
 
 class AuthorListView(generic.ListView):
-    model = PostAuthor
+    model = Author
     context_object_name = 'author_list'
     template_name = 'blog/authors.html'
     paginate_by = 10
 
     def get_queryset(self):
-        return PostAuthor.objects.all()
+        return Author.objects.all()
 
 
 class AuthorDetailView(generic.DetailView):
-    model = PostAuthor
+    model = Author
     template_name = 'blog/author.html'
     
 
 class AuthorUpdate(PermissionRequiredMixin, UpdateView):
-    model = PostAuthor
+    model = Author
     fields = ['bio']
     permission_required = ['blog.change_']
 

@@ -1,38 +1,38 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
 
-from ..models import Post, PostAuthor
+from ..models import Post, Author
 
 
 class AuthorModelTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         User.objects.create_user(username='TestingUser', password='#HYAhaha5454')
-        PostAuthor.objects.create(user_id=1, bio='Testing bio.')
+        Author.objects.create(user_id=1, bio='Testing bio.')
 
     def test_author_str_is_username(self):
         user = User.objects.get(id=1)
         expected_username = user.username
-        author = PostAuthor.objects.get(id=1)
+        author = Author.objects.get(id=1)
         self.assertEqual(str(author), expected_username)
 
     def test_author_id_is_user_id(self):
         user = User.objects.get(id=1)
         expected_id = user.id
-        author = PostAuthor.objects.get(id=1)
+        author = Author.objects.get(id=1)
         self.assertEqual(author.id, expected_id)
 
     def test_author_absolute_url(self):
-        author = PostAuthor.objects.get(id=1)
+        author = Author.objects.get(id=1)
         self.assertEqual(author.get_absolute_url(), '/blog/author/1')
 
     def test_bio_label(self):
-        author = PostAuthor.objects.get(id=1)
+        author = Author.objects.get(id=1)
         bio_label = author._meta.get_field('bio').verbose_name
         self.assertEqual(bio_label, 'bio')
     
     def test_bio_max_length(self):
-        author = PostAuthor.objects.get(id=1)
+        author = Author.objects.get(id=1)
         max_length = author._meta.get_field('bio').max_length
         self.assertEqual(max_length, 50)
 
