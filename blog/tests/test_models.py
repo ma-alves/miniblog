@@ -47,6 +47,15 @@ class PostModelTest(TestCase):
             author = user
         )
 
+    def test_post_content_length(self):
+        post = Post.objects.get(id=1)
+        max_length = post._meta.get_field('content').max_length
+        self.assertEqual(max_length, 2000)        
+
+    def test_post_absolute_url(self):
+        post = Post.objects.get(id=1)
+        self.assertEqual(post.get_absolute_url(), '/blog/post/1')
+
     def test_foreign_key_is_user_id(self):
         post = Post.objects.get(id=1)
         created_user = User.objects.get(id=2)

@@ -10,24 +10,10 @@ from .models import Post, Author, PostComment
 
 def index(request):
     context = {
-        'post_list': (post_list := Post.objects.all()),
-        'author_list': (author_list := Author.objects.all())
+        'post_list': (post_list := Post.objects.all().order_by('-date_posted')),
+        'author_list': (author_list := Author.objects.all().order_by('user'))
     }
     return render(request, 'index.html', context)
-
-
-class PostListView(generic.ListView):
-    model = Post
-    template_name = 'blog/posts.html'
-    paginate_by = 10
-
-    def get_queryset(self):
-        return Post.objects.all()
-    
-
-class PostDetailView(generic.DetailView):
-    model = Post
-    template_name = 'blog/post.html'
 
 
 class AuthorListView(generic.ListView):
@@ -48,7 +34,21 @@ class AuthorDetailView(generic.DetailView):
 class AuthorUpdate(PermissionRequiredMixin, UpdateView):
     model = Author
     fields = ['bio']
-    permission_required = ['blog.change_']
+    permission_required = ['blog.creator']
+
+
+class PostListView(generic.ListView):
+    model = Post
+    template_name = 'blog/posts.html'
+    paginate_by = 10
+
+    def get_queryset(self):
+        return Post.objects.all().order_by('-date_posted')
+    
+
+class PostDetailView(generic.DetailView):
+    model = Post
+    template_name = 'blog/post.html'
 
 
 class PostCreate(PermissionRequiredMixin, CreateView):
@@ -58,7 +58,7 @@ class PostCreate(PermissionRequiredMixin, CreateView):
     
     def form_valid(self, form):
         '''Referencia o autor do post à fk do post.'''
-        form.instance.author_id = self.request.user.id
+        form.instance.author_id = self.request.user.id # depois eu olho essa porra de type ignore
         return super().form_valid(form)
     
 
@@ -75,11 +75,11 @@ class PostDelete(PermissionRequiredMixin, DeleteView):
     
     def form_valid(self, form):
         try:
-            self.object.delete()
-            return HttpResponseRedirect(self.success_url)
+            self.object.delete() # type: ignore
+            return HttpResponseRedirect(self.success_url) # type: ignore
         except Exception as e:
             return HttpResponseRedirect(
-                reverse("delete-post", kwargs={"pk": self.object.pk})
+                reverse("delete-post", kwargs={"pk": self.object.pk}) # type: ignore
             )
     
 

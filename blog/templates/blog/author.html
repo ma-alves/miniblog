@@ -3,6 +3,11 @@
 {% block content %}
   <h1>{{ author.user }}</h1>
   <p>Bio: {{ author.bio }}</p>
+  {% if user.id == author.id %}
+    {% if perms.blog.creator %}
+      <p><a href="{% url 'update-author' author.pk %}">Edit bio</a></p>
+    {% endif %}
+  {% endif %}
   <div style="margin-left:20px;margin-top:20px">
     <h4>Posts</h4>
     {% if author.user.post_set.all %}
