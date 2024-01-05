@@ -6,10 +6,10 @@
     <ul>
       {% for post in post_list %}
       <li>
-        <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
-        ({{ post.author }})
-        <p>{{ post.content|truncatechars:40 }}</p>
+        <a href="{{ post.get_absolute_url }}">{{ post.title }}</a> ({{ post.author }})<br>
+        {{ post.content|truncatechars:40 }}<br>
         <p style="color: grey;">Date posted: {{ post.date_posted }}</p>
+        <hr>
       </li>
       {% endfor %}
     </ul>

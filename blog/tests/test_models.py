@@ -8,7 +8,6 @@ class AuthorModelTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         User.objects.create_user(username='TestingUser', password='#HYAhaha5454')
-        Author.objects.create(user_id=1, bio='Testing bio.')
 
     def test_author_str_is_username(self):
         user = User.objects.get(id=1)
@@ -58,5 +57,11 @@ class PostModelTest(TestCase):
 
     def test_foreign_key_is_user_id(self):
         post = Post.objects.get(id=1)
-        created_user = User.objects.get(id=2)
-        self.assertEqual(post.author_id, created_user.id)
+        user = User.objects.get(id=2)
+        self.assertEqual(post.author_id, user.id)
+
+    def test_author_link_matches_user_link(self):
+        post = Post.objects.get(id=1)
+        user = User.objects.get(id=2)
+        self.assertEqual(post.author.author.get_absolute_url(), user.author.get_absolute_url())
+    

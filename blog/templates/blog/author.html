@@ -2,8 +2,9 @@
 
 {% block content %}
   <h1>{{ author.user }}</h1>
+  <p>Full Name: {{ author.user.first_name }} {{ author.user.last_name }}</p>
   <p>Bio: {{ author.bio }}</p>
-  {% if user.id == author.id %}
+  {% if user.id == author.user_id %}
     {% if perms.blog.creator %}
       <p><a href="{% url 'update-author' author.pk %}">Edit bio</a></p>
     {% endif %}

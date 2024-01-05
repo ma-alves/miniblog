@@ -1,10 +1,24 @@
-from django.contrib.auth.forms import UserCreationForm
-from django.urls import reverse_lazy
-from django.views import generic
+from django.contrib.auth import login, authenticate
+from django.contrib.auth.models import Permission
+from django.shortcuts import render, redirect
+
+from .forms import SignUpForm
 
 
-class SignUpView(generic.CreateView):
-    form_class = UserCreationForm
-    success_url = reverse_lazy("login")
-    template_name = "registration/signup.html"
-    
+def signup_view(request):
+    form = SignUpForm(request.POST)
+    if form.is_valid():
+        user = form.save()
+        perm = Permission.objects.get(codename='creator')
+        user.refresh_from_db() # Carrega a instância novamente
+        user.author.bio = form.cleaned_data.get('bio') # Atribui os outros dados ao user
+        user.user_permissions.add(perm) # Adiciona permissão de creator
+        user.save()
+        username = form.cleaned_data.get('username')
+        password = form.cleaned_data.get('password1')
+        user = authenticate(username=username, password=password)
+        login(request, user)
+        return redirect('index')
+    else:
+        form = SignUpForm()
+    return render(request, 'registration/signup.html', {'form': form})

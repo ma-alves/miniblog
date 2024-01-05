@@ -29,7 +29,7 @@
     <ul>
       {% for author in author_list %}
       <li>
-        <p><a href="{{ author.get_absolute_url }}">{{ author }}</a> - {{ author.bio }}</p>
+        <a href="{{ author.get_absolute_url }}">{{ author }}</a> - {{ author.bio }}
       </li>
       {% endfor %}
     </ul>

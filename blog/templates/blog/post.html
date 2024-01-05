@@ -1,7 +1,7 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-  <h1>{{ post.title }}, by {{ post.author }}</h1>
+  <h1>{{ post.title }}, by <a href="{% url 'author' post.author.author.id %}">{{ post.author }}</a></h1>
   <p>{{ post.content }}</p>
   <p></p>
   <p>Likes: {{ post.likes }} | Date Posted: {{ post.date_posted }}</p>
