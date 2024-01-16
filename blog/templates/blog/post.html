@@ -19,11 +19,11 @@
   <div style="margin-left:20px;margin-top:20px">
     <h4>Comments</h4>
 
-    {% if not post.postcomment_set.all %}
+    {% if not post.comment_set.all %}
       <p>No comments yet.</p>
     {% else %}
     <dl>
-      {% for comment in post.postcomment_set.all %}
+      {% for comment in post.comment_set.all %}
           <dt><a href="{% url 'author' comment.comment_author.id %}">{{ comment.comment_author }}</a></dt>
           <dd>{{ comment.content }}</dd>
       {% endfor %}

@@ -50,7 +50,7 @@ class Post(models.Model):
         permissions = (('creator','Can create, update and delete creator content.'),)
 
 
-class PostComment(models.Model):
+class Comment(models.Model):
     content = models.CharField(max_length=250)
     date_posted = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)

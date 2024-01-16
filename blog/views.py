@@ -5,7 +5,7 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views import generic
 
-from .models import Post, Author, PostComment
+from .models import Post, Author, Comment
 
 
 def index(request):
@@ -58,7 +58,7 @@ class PostCreate(PermissionRequiredMixin, CreateView):
     
     def form_valid(self, form):
         '''Referencia o autor do post à fk do post.'''
-        form.instance.author_id = self.request.user.id # depois eu olho essa porra de type ignore
+        form.instance.author_id = self.request.user.id
         return super().form_valid(form)
     
 
@@ -75,7 +75,7 @@ class PostDelete(PermissionRequiredMixin, DeleteView):
     
     def form_valid(self, form):
         try:
-            self.object.delete() # type: ignore
+            self.object.delete()
             return HttpResponseRedirect(self.success_url) # type: ignore
         except Exception as e:
             return HttpResponseRedirect(
@@ -84,7 +84,7 @@ class PostDelete(PermissionRequiredMixin, DeleteView):
     
 
 class CommentCreate(PermissionRequiredMixin, CreateView):
-    model = PostComment
+    model = Comment
     fields = ['content']
     permission_required = ['blog.creator']
 
