@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import Post, Author, PostComment
+from .models import Post, Author, Comment
 
 # Register your models here.
 
@@ -16,7 +16,7 @@ class UserAdmin(BaseUserAdmin):
     
 
 admin.site.unregister(User)
-admin.site.register(User,UserAdmin)
+admin.site.register(User, UserAdmin)
 admin.site.register(Author)
 
 
@@ -26,7 +26,7 @@ class PostAdmin(admin.ModelAdmin):
     ordering = ['date_posted']
 
 
-@admin.register(PostComment)
+@admin.register(Comment)
 class PostCommentAdmin(admin.ModelAdmin):
     list_display = ('content_limit', 'main_post', 'comment_author', 'date_posted', 'last_modified')
     ordering = ['date_posted']
