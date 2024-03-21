@@ -1,19 +1,18 @@
-{% extends "base_generic.html" %}
-
+{% extends "base_generic.html" %} 
 {% block content %}
-  <h1>Posts</h1>
-  {% if post_list %}
-    <ul>
-      {% for post in post_list %}
-      <li>
-        <a href="{{ post.get_absolute_url }}">{{ post.title }}</a> ({{ post.author }})<br>
-        {{ post.content|truncatechars:40 }}<br>
-        <p style="color: grey;">Date posted: {{ post.date_posted }}</p>
-        <hr>
-      </li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>There are no posts available.</p>
-  {% endif %}
+<h1>Posts</h1>
+{% if post_list %}
+<ul>
+  {% for post in post_list %}
+  <li>
+    <a href="{{ post.get_absolute_url }}">{{ post.title }}</a> ({{ post.author }})<br/>
+    {{ post.content|truncatechars:40 }}<br/>
+    <p style="color: grey">Date posted: {{ post.date_posted }}</p>
+    <hr />
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>There are no posts available.</p>
+{% endif %} 
 {% endblock %}
