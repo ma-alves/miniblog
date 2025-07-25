@@ -5,15 +5,14 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('blog', '0010_alter_post_options'),
+        ("blog", "0010_alter_post_options"),
     ]
 
     operations = [
         migrations.RenameModel(
-            old_name='PostAuthor',
-            new_name='Author',
+            old_name="PostAuthor",
+            new_name="Author",
         ),
     ]

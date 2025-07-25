@@ -10,16 +10,16 @@ from .models import Post, Author, Comment
 
 def index(request):
     context = {
-        'post_list': (post_list := Post.objects.all().order_by('-date_posted')),
-        'author_list': (author_list := Author.objects.all().order_by('user'))
+        "post_list": (post_list := Post.objects.all().order_by("-date_posted")),
+        "author_list": (author_list := Author.objects.all().order_by("user")),
     }
-    return render(request, 'index.html', context)
+    return render(request, "index.html", context)
 
 
 class AuthorListView(generic.ListView):
     model = Author
-    context_object_name = 'author_list'
-    template_name = 'blog/authors.html'
+    context_object_name = "author_list"
+    template_name = "blog/authors.html"
     paginate_by = 10
 
     def get_queryset(self):
@@ -28,80 +28,85 @@ class AuthorListView(generic.ListView):
 
 class AuthorDetailView(generic.DetailView):
     model = Author
-    template_name = 'blog/author.html'
-    
+    template_name = "blog/author.html"
+
 
 class AuthorUpdate(PermissionRequiredMixin, UpdateView):
     model = Author
-    fields = ['bio']
-    permission_required = ['blog.creator']
+    fields = ["bio"]
+    permission_required = ["blog.creator"]
 
 
 class PostListView(generic.ListView):
     model = Post
-    template_name = 'blog/posts.html'
+    template_name = "blog/posts.html"
     paginate_by = 10
 
     def get_queryset(self):
-        return Post.objects.all().order_by('-date_posted')
-    
+        return Post.objects.all().order_by("-date_posted")
+
 
 class PostDetailView(generic.DetailView):
     model = Post
-    template_name = 'blog/post.html'
+    template_name = "blog/post.html"
 
 
 class PostCreate(PermissionRequiredMixin, CreateView):
     model = Post
-    fields = ['title','content']
-    permission_required = ['blog.creator']
-    
+    fields = ["title", "content"]
+    permission_required = ["blog.creator"]
+
     def form_valid(self, form):
-        '''Referencia o autor do post à fk do post.'''
+        """Referencia o autor do post à fk do post."""
         form.instance.author_id = self.request.user.id
         return super().form_valid(form)
-    
+
 
 class PostUpdate(PermissionRequiredMixin, UpdateView):
     model = Post
-    fields = ['title','content']
-    permission_required = ['blog.creator']
-    
+    fields = ["title", "content"]
+    permission_required = ["blog.creator"]
+
 
 class PostDelete(PermissionRequiredMixin, DeleteView):
     model = Post
-    success_url = reverse_lazy('posts')
-    permission_required = ['blog.creator']
-    
+    success_url = reverse_lazy("posts")
+    permission_required = ["blog.creator"]
+
     def form_valid(self, form):
         try:
             self.object.delete()
-            return HttpResponseRedirect(self.success_url) # type: ignore
+            return HttpResponseRedirect(self.success_url)  # type: ignore
         except Exception as e:
             return HttpResponseRedirect(
-                reverse("delete-post", kwargs={"pk": self.object.pk}) # type: ignore
+                reverse("delete-post", kwargs={"pk": self.object.pk})  # type: ignore
             )
-    
+
 
 class CommentCreate(PermissionRequiredMixin, CreateView):
     model = Comment
-    fields = ['content']
-    permission_required = ['blog.creator']
+    fields = ["content"]
+    permission_required = ["blog.creator"]
 
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super(CommentCreate, self).get_context_data(**kwargs)
         # Get the post from id and add it to the context
-        context['main_post'] = get_object_or_404(Post, pk=self.kwargs['pk'])
+        context["main_post"] = get_object_or_404(Post, pk=self.kwargs["pk"])
         return context
-    
+
     def form_valid(self, form):
-        #Add logged-in user as author of comment
+        # Add logged-in user as author of comment
         form.instance.comment_author = self.request.user
-        #Associate comment with blog based on passed id
-        form.instance.main_post = get_object_or_404(Post, pk=self.kwargs['pk'])
+        # Associate comment with blog based on passed id
+        form.instance.main_post = get_object_or_404(Post, pk=self.kwargs["pk"])
         # Call super-class form validation behaviour
         return super(CommentCreate, self).form_valid(form)
-    
+
     def get_success_url(self):
-        return reverse('post', kwargs={'pk':self.kwargs['pk'],})
+        return reverse(
+            "post",
+            kwargs={
+                "pk": self.kwargs["pk"],
+            },
+        )

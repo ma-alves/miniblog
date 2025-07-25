@@ -9,16 +9,18 @@ def signup_view(request):
     form = SignUpForm(request.POST)
     if form.is_valid():
         user = form.save()
-        perm = Permission.objects.get(codename='creator')
-        user.refresh_from_db() # Carrega a instância novamente
-        user.author.bio = form.cleaned_data.get('bio') # Atribui os outros dados ao user
-        user.user_permissions.add(perm) # Adiciona permissão de creator
+        perm = Permission.objects.get(codename="creator")
+        user.refresh_from_db()  # Carrega a instância novamente
+        user.author.bio = form.cleaned_data.get(
+            "bio"
+        )  # Atribui os outros dados ao user
+        user.user_permissions.add(perm)  # Adiciona permissão de creator
         user.save()
-        username = form.cleaned_data.get('username')
-        password = form.cleaned_data.get('password1')
+        username = form.cleaned_data.get("username")
+        password = form.cleaned_data.get("password1")
         user = authenticate(username=username, password=password)
         login(request, user)
-        return redirect('index')
+        return redirect("index")
     else:
         form = SignUpForm()
-    return render(request, 'registration/signup.html', {'form': form})
+    return render(request, "registration/signup.html", {"form": form})

@@ -4,14 +4,17 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('blog', '0009_alter_post_options_alter_postauthor_options'),
+        ("blog", "0009_alter_post_options_alter_postauthor_options"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='post',
-            options={'permissions': (('creator', 'Can create, update and delete creator content.'),)},
+            name="post",
+            options={
+                "permissions": (
+                    ("creator", "Can create, update and delete creator content."),
+                )
+            },
         ),
     ]

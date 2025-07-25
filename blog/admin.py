@@ -11,9 +11,10 @@ class AuthorInline(admin.StackedInline):
 
 
 class UserAdmin(BaseUserAdmin):
-    '''Extends the UserAdmin'''
+    """Extends the UserAdmin"""
+
     inlines = (AuthorInline,)
-    
+
 
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
@@ -22,15 +23,21 @@ admin.site.register(Author)
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ('title', 'author', 'date_posted', 'last_modified')
-    ordering = ['date_posted']
+    list_display = ("title", "author", "date_posted", "last_modified")
+    ordering = ["date_posted"]
 
 
 @admin.register(Comment)
 class PostCommentAdmin(admin.ModelAdmin):
-    list_display = ('content_limit', 'main_post', 'comment_author', 'date_posted', 'last_modified')
-    ordering = ['date_posted']
+    list_display = (
+        "content_limit",
+        "main_post",
+        "comment_author",
+        "date_posted",
+        "last_modified",
+    )
+    ordering = ["date_posted"]
 
     @admin.display(description="Content")
     def content_limit(self, obj):
-        return f'{obj.content}'[:15] + '...'
+        return f"{obj.content}"[:15] + "..."
