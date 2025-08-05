@@ -1,8 +1,13 @@
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import Permission
 from django.shortcuts import render, redirect
 
 from .forms import SignUpForm
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('index')
 
 
 def signup_view(request):

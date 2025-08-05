@@ -2,6 +2,10 @@
 
 {% block content %}
   <h1>Authors</h1>
+  <form method="get">
+    <input type="text" name="query" value="{{ request.GET.query }}">
+    <input class="button" type='submit' value="Search">
+  </form>
   {% if author_list %}
     <ul>
       {% for author in author_list %}

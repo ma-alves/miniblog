@@ -18,12 +18,16 @@ def index(request):
 
 class AuthorListView(generic.ListView):
     model = Author
-    context_object_name = "author_list"
     template_name = "blog/authors.html"
     paginate_by = 10
 
     def get_queryset(self):
-        return Author.objects.all()
+        query = self.request.GET.get("query", "")
+        author_list = Author.objects.all()
+        if query:
+            author_list = author_list.filter(user__username__icontains=query)
+            print('bateu')
+        return author_list
 
 
 class AuthorDetailView(generic.DetailView):

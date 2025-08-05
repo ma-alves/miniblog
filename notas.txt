@@ -1,0 +1,14 @@
+# tarefas
+- https://www.youtube.com/watch?v=ZxMB6Njs3ck&t=1127s 01:53:00
+- fazer search de posts também, e na pagina do author
+- escrever testes
+
+# comandos
+- migrate
+ - uv run python3 manage.py makemigrations
+ - uv run python3 manage.py migrate
+
+# atalhos
+- alt + z: word wrap, não quebra linhas só melhora visualização
+- lore: bota Lorem Ipsum
+- `fuser -k -n tcp 8000`: fechar processo na porta 8000

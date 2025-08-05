@@ -1,39 +1,39 @@
 {% extends "base_generic.html" %}
 
 {% block title %}
-    <title>miniblog</title>
+<title>miniblog</title>
 {% endblock %}
 
 {% block content %}
-  <h1>Welcome to miniblog!!!</h1>
-  <p>
-    Welcome to miniblog, a website developed by
-    <em>meeeeeeeeee</em> with the help of the MDN folks!
-  </p>
-  <h2>Latest posts</h2>
-  {% if post_list %}
-    <ul>
-      {% for post in post_list %}
-      <li>
-        <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
-        ({{ post.author }}) - {{ post.content }}
-      </li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>There are no posts available.</p>
-  {% endif %}
+<h1>Welcome to miniblog!!!</h1>
+<p>
+  A website developed by
+  <em>me</em> based on MDN Django tutorial! My focus on this project is to show my knowledge on the Django Web Framework, hence the simple frontend :)
+</p>
+<h2>Latest posts</h2>
+{% if post_list %}
+<ul>
+  {% for post in post_list %}
+  <li>
+    <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+    ({{ post.author }}) - {{ post.content }}
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>There are no posts available.</p>
+{% endif %}
 
-  <h2>Authors</h2>
-  {% if author_list %}
-    <ul>
-      {% for author in author_list %}
-      <li>
-        <a href="{{ author.get_absolute_url }}">{{ author }}</a> - {{ author.bio }}
-      </li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>There are no authors available.</p>
-  {% endif %}
+<h2>Authors</h2>
+{% if author_list %}
+<ul>
+  {% for author in author_list %}
+  <li>
+    <a href="{{ author.get_absolute_url }}">{{ author }}</a> - {{ author.bio }}
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>There are no authors available.</p>
+{% endif %}
 {% endblock %}
