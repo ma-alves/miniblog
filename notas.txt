@@ -1,14 +1,27 @@
+
+ATENTO AO BRANCH -- ESTAMOS EM 'chat'
+
 # tarefas
+- alterar created_at e updated_at em posts
+- likes: zerar banco, autenticação, erro e nova tabela PostLike
 - https://www.youtube.com/watch?v=ZxMB6Njs3ck&t=1127s 01:53:00
+- https://www.geeksforgeeks.org/python/realtime-chat-app-using-django/
 - fazer search de posts também, e na pagina do author
 - escrever testes
+- ler sobre ajax: https://www.w3schools.com/jquery/jquery_ajax_intro.asp
 
 # comandos
-- migrate
- - uv run python3 manage.py makemigrations
- - uv run python3 manage.py migrate
+$ uv run python3 manage.py makemigrations
+$ uv run python3 manage.py migrate
 
 # atalhos
 - alt + z: word wrap, não quebra linhas só melhora visualização
 - lore: bota Lorem Ipsum
-- `fuser -k -n tcp 8000`: fechar processo na porta 8000
+$ fuser -k -n tcp 8000 (fechar processo na porta 8000)
+
+# postgres
+- senha: 123456
+$ sudo -u postgres psql
+$ \c blog postgres
+$ \dt (mostrar tabelas)
+$ \q

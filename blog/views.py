@@ -1,5 +1,6 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpRequest, JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -26,7 +27,7 @@ class AuthorListView(generic.ListView):
         author_list = Author.objects.all()
         if query:
             author_list = author_list.filter(user__username__icontains=query)
-            print('bateu')
+            print("bateu")
         return author_list
 
 
@@ -80,13 +81,25 @@ class PostDelete(PermissionRequiredMixin, DeleteView):
     def form_valid(self, form):
         try:
             self.object.delete()
-            return HttpResponseRedirect(self.success_url)  # type: ignore
+            return HttpResponseRedirect(self.success_url)
         except Exception as e:
             return HttpResponseRedirect(
-                reverse("delete-post", kwargs={"pk": self.object.pk})  # type: ignore
+                reverse("delete-post", kwargs={"pk": self.object.pk})
             )
 
 
+@login_required
+def post_like(request, pk):
+    post = get_object_or_404(Post, id=pk)
+    post.likes += 1
+    post.save()
+    return JsonResponse({
+        'status': 'success',
+        'likes': post.likes,
+    })
+    # return JsonResponse({'status': 'error'}, status=400)
+
+# Não lembro a origem destes comentários
 class CommentCreate(PermissionRequiredMixin, CreateView):
     model = Comment
     fields = ["content"]

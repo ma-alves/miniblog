@@ -27,7 +27,7 @@ def update_author_signal(sender, instance, created, **kwargs):
 class Post(models.Model):
     title = models.CharField(max_length=50)
     content = models.TextField(max_length=2000)
-    likes = models.IntegerField(default=0)
+    likes = models.ManyToManyField(User, related_name='liked_posts', blank=True)
 
     # Utilizar atributos de User ao usar post.author!
     author = models.ForeignKey(
@@ -36,14 +36,20 @@ class Post(models.Model):
         null=False,
     )
 
-    date_posted = models.DateTimeField(auto_now_add=True)
-    last_modified = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.title
 
     def get_absolute_url(self):
         return reverse("post", args=[str(self.id)])
+    
+    def get_like_count(self):
+        return self.likes.count()
+    
+    def user_has_liked(self, user: User):
+        return user.is_authenticated and self.likes.filter(id=user.id).exists()
 
     class Meta:
         permissions = (("creator", "Can create, update and delete creator content."),)
@@ -51,8 +57,8 @@ class Post(models.Model):
 
 class Comment(models.Model):
     content = models.CharField(max_length=250)
-    date_posted = models.DateTimeField(auto_now_add=True)
-    last_modified = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     comment_author = models.ForeignKey(
         User, on_delete=models.CASCADE, null=False, blank=False

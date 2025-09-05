@@ -7,7 +7,7 @@ from .forms import SignUpForm
 
 def logout_view(request):
     logout(request)
-    return redirect('index')
+    return redirect("index")
 
 
 def signup_view(request):

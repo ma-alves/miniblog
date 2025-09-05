@@ -23,8 +23,8 @@ admin.site.register(Author)
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ("title", "author", "date_posted", "last_modified")
-    ordering = ["date_posted"]
+    list_display = ("title", "author", "created_at", "updated_at")
+    ordering = ["created_at"]
 
 
 @admin.register(Comment)
@@ -33,10 +33,10 @@ class PostCommentAdmin(admin.ModelAdmin):
         "content_limit",
         "main_post",
         "comment_author",
-        "date_posted",
-        "last_modified",
+        "created_at",
+        "updated_at",
     )
-    ordering = ["date_posted"]
+    ordering = ["created_at"]
 
     @admin.display(description="Content")
     def content_limit(self, obj):

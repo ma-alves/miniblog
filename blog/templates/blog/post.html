@@ -1,20 +1,24 @@
-{% extends "base_generic.html" %} 
+{% extends "base_generic.html" %}
 {% block content %}
 <h2>
   {{ post.title }}, by
   <a href="{% url 'author' post.author.author.id %}">{{ post.author }}</a>
 </h2>
 <p>{{ post.content }}</p>
-<p>Likes: {{ post.likes }} | Date Posted: {{ post.date_posted }}</p>
+{% if user.is_authenticated %}
+  <button onclick="like()">Like</button>
+{% endif %}
+<p id="like-count">Likes: {{ post.likes }}</p>
+<p>Date Posted: {{ post.date_posted }}</p>
 
-{% if user.id == post.author.id %} 
+{% if user.id == post.author.id %}
 {% if perms.blog.creator %}
 <p>
   <a href="{% url 'update-post' post.pk %}">(Edit</a> |
   <a href="{% url 'delete-post' post.pk %}">Delete)</a>
 </p>
-{% endif %} 
-{% endif %} 
+{% endif %}
+{% endif %}
 {% if user.is_authenticated %}
 <p><a href="{% url 'comment-post' post.pk %}">Comment</a></p>
 {% endif %}
@@ -29,9 +33,25 @@
     <dt>
       <a href="{% url 'author' comment.comment_author.id %}">{{ comment.comment_author }}</a>
     </dt>
-    <dd>{{ comment.content }}</dd>
+    <dd>{{ comment.content }} — {{ comment.date_posted }}</dd>
     {% endfor %}
   </dl>
   {% endif %}
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script>
+  function like() {
+    $.ajax({
+      type: "POST",
+      url: "{% url 'like' post.pk %}",
+      data: { 'csrfmiddlewaretoken': '{{ csrf_token }}' },
+      dataType: 'json',
+      success: function(data) {
+        if(data.status === 'success') {
+          $('#like-count').text('Likes: ' + data.likes);
+        }
+      }
+    })
+  }
+</script>
 {% endblock %}
