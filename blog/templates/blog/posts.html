@@ -1,13 +1,18 @@
 {% extends "base_generic.html" %} 
 {% block content %}
 <h1>Posts</h1>
+  <form method="get">
+    {% csrf_token %}
+    <input type="text" name="query" value="{{ request.GET.query }}">
+    <input class="button" type='submit' value="Search">
+  </form>
 {% if post_list %}
 <ul>
   {% for post in post_list %}
   <li>
     <a href="{{ post.get_absolute_url }}">{{ post.title }}</a> ({{ post.author }})<br/>
     {{ post.content|truncatechars:40 }}<br/>
-    <p style="color: grey">Date posted: {{ post.date_posted }}</p>
+    <p style="color: grey">Date posted: {{ post.created_at }}</p>
     <hr />
   </li>
   {% endfor %}

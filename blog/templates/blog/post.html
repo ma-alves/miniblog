@@ -8,16 +8,16 @@
 {% if user.is_authenticated %}
   <button onclick="like()">Like</button>
 {% endif %}
-<p id="like-count">Likes: {{ post.likes }}</p>
-<p>Date Posted: {{ post.date_posted }}</p>
+<p id="like-count">Likes: {{ post.get_like_count }}</p>
+<p>Date Posted: {{ post.created_at }}</p>
 
 {% if user.id == post.author.id %}
-{% if perms.blog.creator %}
-<p>
-  <a href="{% url 'update-post' post.pk %}">(Edit</a> |
-  <a href="{% url 'delete-post' post.pk %}">Delete)</a>
-</p>
-{% endif %}
+  {% if perms.blog.creator %}
+  <p>
+    <a href="{% url 'update-post' post.pk %}">(Edit</a> |
+    <a href="{% url 'delete-post' post.pk %}">Delete)</a>
+  </p>
+  {% endif %}
 {% endif %}
 {% if user.is_authenticated %}
 <p><a href="{% url 'comment-post' post.pk %}">Comment</a></p>
@@ -33,7 +33,7 @@
     <dt>
       <a href="{% url 'author' comment.comment_author.id %}">{{ comment.comment_author }}</a>
     </dt>
-    <dd>{{ comment.content }} — {{ comment.date_posted }}</dd>
+    <dd>{{ comment.content }} — {{ comment.created_at }}</dd>
     {% endfor %}
   </dl>
   {% endif %}
@@ -48,7 +48,14 @@
       dataType: 'json',
       success: function(data) {
         if(data.status === 'success') {
-          $('#like-count').text('Likes: ' + data.likes);
+          $('#like-count').text('Likes: ' + data.count);
+        }
+      },
+      error: function(xhr, status, error) {
+        if(xhr.status === 403) {
+          window.location.href = '{% url "login" %}?next={{ request.path }}';
+        } else {
+            alert('Ocorreu um erro: ' + error);
         }
       }
     })

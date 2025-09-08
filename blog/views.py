@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.http import HttpResponseRedirect, HttpRequest, JsonResponse
+from django.db.models import Q
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -11,7 +12,7 @@ from .models import Post, Author, Comment
 
 def index(request):
     context = {
-        "post_list": (post_list := Post.objects.all().order_by("-date_posted")),
+        "post_list": (post_list := Post.objects.all().order_by("-created_at")),
         "author_list": (author_list := Author.objects.all().order_by("user")),
     }
     return render(request, "index.html", context)
@@ -27,7 +28,6 @@ class AuthorListView(generic.ListView):
         author_list = Author.objects.all()
         if query:
             author_list = author_list.filter(user__username__icontains=query)
-            print("bateu")
         return author_list
 
 
@@ -48,7 +48,11 @@ class PostListView(generic.ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        return Post.objects.all().order_by("-date_posted")
+        query = self.request.GET.get("query", "")
+        post_list = Post.objects.all().order_by("-created_at")
+        if query:
+            post_list = post_list.filter(Q(content__icontains=query) | Q(title__icontains=query)).order_by("-created_at")
+        return post_list
 
 
 class PostDetailView(generic.DetailView):
@@ -89,15 +93,24 @@ class PostDelete(PermissionRequiredMixin, DeleteView):
 
 
 @login_required
-def post_like(request, pk):
-    post = get_object_or_404(Post, id=pk)
-    post.likes += 1
-    post.save()
-    return JsonResponse({
-        'status': 'success',
-        'likes': post.likes,
-    })
-    # return JsonResponse({'status': 'error'}, status=400)
+def like_post(request, pk):
+    if request.method == 'POST':
+        post = get_object_or_404(Post, id=pk)
+        user = request.user
+
+        if post.user_has_liked(user):
+            post.likes.remove(user)
+            liked = False
+        else:
+            post.likes.add(user)
+            liked = True
+
+        return JsonResponse({
+            'status': 'success',
+            'liked': liked,
+            'count': post.get_like_count()
+        })
+    return JsonResponse({'status': 'error'}, status=400)
 
 # Não lembro a origem destes comentários
 class CommentCreate(PermissionRequiredMixin, CreateView):

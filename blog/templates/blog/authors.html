@@ -7,16 +7,16 @@
     <input type="text" name="query" value="{{ request.GET.query }}">
     <input class="button" type='submit' value="Search">
   </form>
-  {% if author_list %}
-    <ul>
-      {% for author in author_list %}
-      <li>
-        <a href="{{ author.get_absolute_url }}">{{ author.user }}</a> - 
-        {{ author.bio }}
-      </li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>There are no authors available.</p>
-  {% endif %}
+{% if author_list %}
+  <ul>
+    {% for author in author_list %}
+    <li>
+      <a href="{{ author.get_absolute_url }}">{{ author.user }}</a> - 
+      {{ author.bio }}
+    </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>There are no authors available.</p>
+{% endif %}
 {% endblock %}
