@@ -5,40 +5,41 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('blog', '0012_rename_postcomment_comment'),
+        ("blog", "0012_rename_postcomment_comment"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='comment',
-            old_name='date_posted',
-            new_name='created_at',
+            model_name="comment",
+            old_name="date_posted",
+            new_name="created_at",
         ),
         migrations.RenameField(
-            model_name='comment',
-            old_name='last_modified',
-            new_name='updated_at',
+            model_name="comment",
+            old_name="last_modified",
+            new_name="updated_at",
         ),
         migrations.RenameField(
-            model_name='post',
-            old_name='date_posted',
-            new_name='created_at',
+            model_name="post",
+            old_name="date_posted",
+            new_name="created_at",
         ),
         migrations.RenameField(
-            model_name='post',
-            old_name='last_modified',
-            new_name='updated_at',
+            model_name="post",
+            old_name="last_modified",
+            new_name="updated_at",
         ),
         migrations.RemoveField(
-            model_name='post',
-            name='likes',
+            model_name="post",
+            name="likes",
         ),
         migrations.AddField(
-            model_name='post',
-            name='likes',
-            field=models.ManyToManyField(blank=True, related_name='liked_posts', to=settings.AUTH_USER_MODEL),
+            model_name="post",
+            name="likes",
+            field=models.ManyToManyField(
+                blank=True, related_name="liked_posts", to=settings.AUTH_USER_MODEL
+            ),
         ),
     ]

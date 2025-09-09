@@ -51,7 +51,9 @@ class PostListView(generic.ListView):
         query = self.request.GET.get("query", "")
         post_list = Post.objects.all().order_by("-created_at")
         if query:
-            post_list = post_list.filter(Q(content__icontains=query) | Q(title__icontains=query)).order_by("-created_at")
+            post_list = post_list.filter(
+                Q(content__icontains=query) | Q(title__icontains=query)
+            ).order_by("-created_at")
         return post_list
 
 
@@ -94,7 +96,7 @@ class PostDelete(PermissionRequiredMixin, DeleteView):
 
 @login_required
 def like_post(request, pk):
-    if request.method == 'POST':
+    if request.method == "POST":
         post = get_object_or_404(Post, id=pk)
         user = request.user
 
@@ -105,14 +107,13 @@ def like_post(request, pk):
             post.likes.add(user)
             liked = True
 
-        return JsonResponse({
-            'status': 'success',
-            'liked': liked,
-            'count': post.get_like_count()
-        })
-    return JsonResponse({'status': 'error'}, status=400)
+        return JsonResponse(
+            {"status": "success", "liked": liked, "count": post.get_like_count()}
+        )
+    return JsonResponse({"status": "error"}, status=400)
 
-# Não lembro a origem destes comentários
+
+# Não lembro a origem destes comentários (código pré-LLMs)
 class CommentCreate(PermissionRequiredMixin, CreateView):
     model = Comment
     fields = ["content"]

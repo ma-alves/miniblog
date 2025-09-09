@@ -27,7 +27,7 @@ def update_author_signal(sender, instance, created, **kwargs):
 class Post(models.Model):
     title = models.CharField(max_length=50)
     content = models.TextField(max_length=2000)
-    likes = models.ManyToManyField(User, related_name='liked_posts', blank=True)
+    likes = models.ManyToManyField(User, related_name="liked_posts", blank=True)
 
     # Utilizar atributos de User ao usar post.author!
     author = models.ForeignKey(
@@ -44,10 +44,10 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         return reverse("post", args=[str(self.id)])
-    
+
     def get_like_count(self):
         return self.likes.count()
-    
+
     def user_has_liked(self, user: User):
         return user.is_authenticated and self.likes.filter(id=user.id).exists()
 
