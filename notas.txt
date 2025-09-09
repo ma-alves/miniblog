@@ -1,4 +1,5 @@
 # tarefas
+- finalizar CRUD de Comment
 - escrever testes
 
 # comandos
